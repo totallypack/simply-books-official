@@ -1,5 +1,3 @@
-'use client';
-
 import firebase from 'firebase';
 import PropTypes from 'prop-types';
 
