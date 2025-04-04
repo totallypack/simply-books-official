@@ -1,5 +1,7 @@
 'use client';
 
+/* eslint-disable @next/next/no-img-element */
+
 import React, { useEffect, useState } from 'react';
 import { viewBookDetails } from '@/api/mergedData';
 import PropTypes from 'prop-types';
