@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/utils/context/authContext';
 import { clientCredentials } from '@/utils/client';
 import UpdateUserData from '@/components/User';
-import Loading from '../../components/Loading';
+import Loading from '@/components/Loading';
 
 const endpoint = clientCredentials.databaseURL;
 
@@ -15,25 +15,25 @@ export default function UserComponent() {
   const [isLoading, setIsLoading] = useState(true);
   const { user, userLoading } = useAuth();
 
-  const fetchUserData = async () => {
-    if (!user) return;
-
-    setIsLoading(true);
-    try {
-      const response = await fetch(`${endpoint}/users/${user.uid}.json`);
-      const userData = await response.json();
-
-      if (userData) {
-        setUserProfile(userData);
-      }
-    } catch (error) {
-      console.error('Error fetching user data:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchUserData = async () => {
+      if (!user) return;
+
+      setIsLoading(true);
+      try {
+        const response = await fetch(`${endpoint}/users/${user.uid}.json`);
+        const userData = await response.json();
+
+        if (userData) {
+          setUserProfile(userData);
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
     if (user && !userLoading) {
       if (typeof window !== 'undefined') {
         UpdateUserData({
