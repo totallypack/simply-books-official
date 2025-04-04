@@ -12,11 +12,13 @@ const endpoint = clientCredentials.databaseURL;
 
 export default function UserComponent() {
   const [userProfile, setUserProfile] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
   const { user, userLoading } = useAuth();
 
   const fetchUserData = async () => {
     if (!user) return;
 
+    setIsLoading(true);
     try {
       const response = await fetch(`${endpoint}/users/${user.uid}.json`);
       const userData = await response.json();
@@ -26,23 +28,29 @@ export default function UserComponent() {
       }
     } catch (error) {
       console.error('Error fetching user data:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
     if (user && !userLoading) {
-      UpdateUserData({
-        uid: user.uid,
-        displayName: user.displayName,
-        email: user.email,
-        photoURL: user.photoURL,
-      });
+      if (typeof window !== 'undefined') {
+        UpdateUserData({
+          uid: user.uid,
+          displayName: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+        });
+      }
       fetchUserData();
+    } else if (!userLoading) {
+      setIsLoading(false);
     }
   }, [user, userLoading]);
 
-  if (userLoading) {
-    return <div>{Loading()}</div>;
+  if (userLoading || isLoading) {
+    return <Loading />;
   }
 
   if (!user) {
@@ -51,13 +59,11 @@ export default function UserComponent() {
 
   return (
     <div>
-      <div>
-        <img src={userProfile.photoURL} alt="Profile" width={100} height={100} className="rounded-full" />
-      </div>
+      <div>{userProfile.photoURL && <img src={userProfile.photoURL} alt="Profile" width={100} height={100} className="rounded-full" />}</div>
       <h1>User Profile</h1>
-      <div>Name: {userProfile.name}</div>
-      <div>Email: {userProfile.email}</div>
-      <div>Last Login: {userProfile.lastLogin && new Date(userProfile.lastLogin).toLocaleString()}</div>
+      <div>Name: {userProfile.name || 'N/A'}</div>
+      <div>Email: {userProfile.email || 'N/A'}</div>
+      <div>Last Login: {userProfile.lastLogin ? new Date(userProfile.lastLogin).toLocaleString() : 'N/A'}</div>
     </div>
   );
 }
