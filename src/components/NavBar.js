@@ -22,7 +22,7 @@ export default function NavBar() {
               Authors
             </Link>
             {/* <Link className="nav-link" href="/author/[firebaseKey]">
-              Create Author
+              Create Author 1
             </Link> */}
           </Nav>
           <Button variant="danger" onClick={signOut}>
