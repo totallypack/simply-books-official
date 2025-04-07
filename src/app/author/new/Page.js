@@ -1,5 +1,8 @@
-import React, { memo } from 'react';
+import React from 'react';
+import AuthorForm from '@/components/forms/AuthorForm';
 
-const Page = memo(() => <div>Page</div>);
+// TODO: create a reusable form to add/edit book and render in this view
 
-export default Page;
+export default function AddAuthor() {
+  return <AuthorForm />;
+}
